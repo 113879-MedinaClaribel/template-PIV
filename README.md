@@ -26,14 +26,16 @@ Repo-base/
 │   └── src/
 │       ├── main/
 │       │   ├── java/com/example/template/
-│       │   │   ├── config/        # Configuración de CORS y beans globales
+│       │   │   ├── config/        # Configuración de CORS, OpenAPI y beans globales
 │       │   │   ├── controllers/   # Puerta HTTP: validación y enrutamiento
-│       │   │   ├── services/      # Lógica de negocio (Interfaces e Impl)
+│       │   │   ├── services/      # Lógica de negocio (Interfaces e Impl con @Transactional)
 │       │   │   ├── dtos/          # Contratos inmutables (Java 21 Records)
+│       │   │   ├── entities/      # Entidades JPA (@Entity, @Table)
+│       │   │   ├── repositories/  # Spring Data JPA Repositories (JpaRepository)
 │       │   │   ├── exceptions/    # BusinessException y GlobalExceptionHandler
 │       │   │   └── BackendApplication.java
 │       │   └── resources/
-│       │       └── application.yml# Configuración con Virtual Threads habilitados
+│       │       └── application.yml# Configuración H2/PostgreSQL y Virtual Threads
 │       └── test/                  # Tests unitarios e integración (JUnit 5)
 │
 ├── frontend/                      # SPA Angular 20 + Tailwind CSS
@@ -81,6 +83,7 @@ El backend estará disponible en `http://localhost:8080`.
 *   **Estado del sistema**: `http://localhost:8080/api/status` o `http://localhost:8080/`
 *   **Swagger UI (OpenAPI 3)**: `http://localhost:8080/swagger-ui.html` o `http://localhost:8080/swagger-ui/index.html`
 *   **Especificación OpenAPI JSON**: `http://localhost:8080/api-docs`
+*   **Consola H2 (Base en memoria)**: `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:template_db`, User: `sa`, Password: en blanco)
 
 ### 2. Iniciar el Frontend
 

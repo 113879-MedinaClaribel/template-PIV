@@ -8,7 +8,30 @@ spring:
     name: backend-template
   threads:
     virtual:
-      enabled: true # Habilita Project Loom / Virtual Threads de Java 21
+      enabled: true # Project Loom / Java 21 Virtual Threads
+
+  datasource:
+    # Default: H2 in-memory DB for instantaneous zero-config local run
+    # Production / Docker: Overridden by SPRING_DATASOURCE_URL env var
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:template_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
 
 app:
   cors:

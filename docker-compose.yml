@@ -1,0 +1,56 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: template-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - CORS_ALLOWED_ORIGINS=http://localhost:4200,http://localhost:80,http://localhost
+      # Cuando definas la persistencia, podés inyectar acá las credenciales:
+      # - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/template_db
+      # - SPRING_DATASOURCE_USERNAME=postgres
+      # - SPRING_DATASOURCE_PASSWORD=postgres
+    networks:
+      - template-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: template-frontend
+    ports:
+      - "80:80"
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - template-network
+    restart: unless-stopped
+
+  # =========================================================================
+  # Base de Datos (Opcional - Descomentar según las necesidades del proyecto)
+  # =========================================================================
+  # database:
+  #   image: postgres:16-alpine
+  #   container_name: template-db
+  #   environment:
+  #     - POSTGRES_DB=template_db
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   networks:
+  #     - template-network
+
+# volumes:
+#   pgdata:
+
+networks:
+  template-network:
+    driver: bridge

@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Backend
+**/target/
+**/.mvn/
+**/HELP.md
+
+# Frontend
+**/node_modules/
+**/dist/
+**/.angular/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+*.log

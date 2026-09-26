@@ -1,0 +1,154 @@
+<div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-sky-500 selection:text-white">
+  <!-- Header / Navigation -->
+  <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="h-9 w-9 rounded-lg bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-sky-500/20">
+          RB
+        </div>
+        <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-indigo-300">
+          Repo-Base Template
+        </span>
+      </div>
+      <div class="flex items-center space-x-2 text-xs">
+        <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-mono">Java 21</span>
+        <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-mono">Spring Boot 3</span>
+        <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-mono">Angular 20</span>
+        <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-mono">Tailwind</span>
+        <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-mono">Docker</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-10">
+    <!-- Hero Section -->
+    <div class="text-center space-y-4 max-w-3xl mx-auto">
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+        Clean Architecture, <br class="hidden sm:inline" />
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-400">
+          solid foundations & decoupled design.
+        </span>
+      </h1>
+      <p class="text-slate-400 text-base sm:text-lg">
+        Enterprise base template ready for production. Persistence-agnostic, fine-grained reactivity with Signals, and multi-stage packaging.
+      </p>
+    </div>
+
+    <!-- Live Backend Connection Test Card -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl shadow-slate-950/50 relative overflow-hidden">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5 mb-6">
+        <div>
+          <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+            <span>Frontend ↔ Backend Connectivity Diagnostic</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            Live query to endpoint <code class="text-sky-400 font-mono bg-slate-950 px-1.5 py-0.5 rounded">/api/status</code> using Signals
+          </p>
+        </div>
+        <button
+          (click)="checkHealth()"
+          [disabled]="isLoading()"
+          class="px-4 py-2 rounded-lg bg-sky-500 hover:bg-sky-600 active:scale-95 disabled:opacity-50 text-white font-medium text-sm transition-all duration-150 shadow-md shadow-sky-500/20 flex items-center gap-2 cursor-pointer"
+        >
+          @if (isLoading()) {
+            <span class="inline-block w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+            <span>Checking...</span>
+          } @else {
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Re-verify Status</span>
+          }
+        </button>
+      </div>
+
+      <!-- Result state -->
+      @if (status()) {
+        <div class="bg-emerald-950/40 border border-emerald-800/60 rounded-xl p-5 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+            </span>
+            <span class="font-bold text-emerald-400 text-sm tracking-wide uppercase">
+              Backend Online (Status: {{ status()?.status }})
+            </span>
+          </div>
+          <p class="text-slate-300 text-sm">
+            {{ status()?.message }}
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs font-mono text-slate-400">
+            <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
+              <span class="text-slate-500 block">Java Runtime:</span>
+              <span class="text-slate-200 font-semibold">{{ status()?.javaVersion }}</span>
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
+              <span class="text-slate-500 block">Spring Boot:</span>
+              <span class="text-slate-200 font-semibold">{{ status()?.springBootVersion }}</span>
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
+              <span class="text-slate-500 block">Timestamp:</span>
+              <span class="text-slate-200">{{ status()?.timestamp | date:'mediumTime' }}</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (errorMessage()) {
+        <div class="bg-amber-950/30 border border-amber-800/50 rounded-xl p-5 space-y-2">
+          <div class="flex items-center gap-2 text-amber-400 font-medium text-sm">
+            <svg class="w-5 h-5 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <span>Backend not detected</span>
+          </div>
+          <p class="text-slate-300 text-xs sm:text-sm">
+            {{ errorMessage() }}
+          </p>
+          <div class="text-xs text-slate-400 bg-slate-950/60 p-3 rounded-lg border border-slate-800/80 font-mono mt-3">
+            Tip: In another terminal run <span class="text-sky-400">cd backend; .\mvnw.cmd spring-boot:run</span> or spin up containers with <span class="text-sky-400">docker compose up</span>.
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Architecture Pillars -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+        <div class="h-10 w-10 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center font-bold">
+          01
+        </div>
+        <h3 class="text-base font-semibold text-white">Clean Architecture</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Strict layer separation: REST controllers, decoupled business services, immutable Java 21 Record DTOs, and global exception handling.
+        </p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+        <div class="h-10 w-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold">
+          02
+        </div>
+        <h3 class="text-base font-semibold text-white">Angular Standalone & Signals</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          No boilerplate NgModules. Native control flow (<code class="text-sky-400">&#64;if</code>, <code class="text-sky-400">&#64;for</code>), modern injection <code class="text-sky-400">inject()</code>, and utility Tailwind CSS.
+        </p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+        <div class="h-10 w-10 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+          03
+        </div>
+        <h3 class="text-base font-semibold text-white">Multi-Stage Docker</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Isolated compile steps producing minimal Alpine Linux runtime images with non-root security principles and optimized Nginx reverse proxy.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    <p>Repo-Base Template • Java 21 • Spring Boot 3 • Angular 20 • Tailwind CSS • Docker</p>
+  </footer>
+</div>
